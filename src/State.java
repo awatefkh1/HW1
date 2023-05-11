@@ -36,18 +36,32 @@ public class State {
         }
 
         Action[] actions = new Action[n];
-        for(int l = -1; l < 2; l+=2){
-            for(int k = -1; k < 2; k+=2){
-                if(inBounds(i+k, j)){
 
-                }
-            }
-            if(inBounds(i, j+l)){
-
-            }
+        //up
+        if(inBounds(i-1, j)){
+            actions[0] = new Action(board.getTiles()[i-1][j], "up");
+        }
+        //down
+        if(inBounds(i+1, j)){
+            actions[1] = new Action(board.getTiles()[i+1][j], "down");
+        }
+        //right
+        if(inBounds(i, j+1)) {
+            actions[2] = new Action(board.getTiles()[i][j-1], "right");
+        }
+        //left
+        if(inBounds(i, j-1)){
+            actions[3] = new Action(board.getTiles()[i][j+1], "left");
         }
 
+        return actions;
+
     }
+
+    public boolean inBounds(int i, int j){
+        return (i >= 0 && j >= 0 && i < board.getHeight() && j < board.getWidth());
+    }
+
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof State)) {
