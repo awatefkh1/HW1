@@ -75,4 +75,32 @@ public class State {
     public int hashCode() {
         return board.hashCode();
     }
+
+    public State result(Action action){
+        int i = action.getTile().getLocationI();
+        int j = action.getTile().getLocationJ();
+        moveTile(this.board.getTiles()[i][j], action.getDirection(), i, j);
+        return new State(this.board);
+    }
+
+
+    public void moveTile(Tile tile, String direction, int locationI, int locationJ){
+        int newI = locationI;
+        int newJ = locationJ;
+        switch (direction){
+            case "up":
+                newI--;
+                break;
+            case "down":
+                newI++;
+                break;
+            case "right":
+                newJ++;
+                break;
+            case "left":
+                newJ--;
+                break;
+        }
+        this.board.setTile(tile, newI, newJ);
+    }
 }

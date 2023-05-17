@@ -14,7 +14,7 @@ public class Board {
             String[] splitRow = rows[i].split(" ");
             for (int j = 0; j < rows[i].length(); j++) {
                 if (splitRow[j] != "_") {
-                    this.tiles[i][j] = new Tile(Integer.parseInt(splitRow[j]));
+                    this.tiles[i][j] = new Tile(Integer.parseInt(splitRow[j]), i, j);
                 }
             }
         }

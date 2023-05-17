@@ -11,4 +11,12 @@ public class Action {
     public String toString() {
         return "Move " + this.tile.getValue() + " " + this.direction;
     }
+
+    public Tile getTile(){
+        return this.tile;
+    }
+
+    public String getDirection(){
+        return this.direction;
+    }
 }

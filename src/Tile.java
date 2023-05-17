@@ -2,7 +2,9 @@ public class Tile {
 
     private int value;
 
-    public Tile(int value){
+    public Tile(int value, int locationI, int locationJ){
+        this.locationI = locationI;
+        this.locationJ = locationJ;
         this.value = value;
     }
 
@@ -22,5 +24,13 @@ public class Tile {
 
     public int getValue() {
         return value;
+    }
+
+    public int getLocationJ() {
+        return locationJ;
+    }
+
+    public int getLocationI() {
+        return locationI;
     }
 }
