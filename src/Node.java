@@ -44,10 +44,10 @@ public class Node {
         int count = 1;
         for(int i = 0; i < height; i++){
             for(int j = 0; j < width; j++){
-                tiles[i][j] = new Tile(count++, i, j);
+                tiles[i][j] = new Tile(count++);
             }
         }
-        tiles[height-1][width-1] = null;
+        tiles[height-1][width-1] = new Tile(0);
 
         Board goalBoard = new Board(tiles, height, width);
         return goalBoard;
@@ -61,9 +61,9 @@ public class Node {
         int heuristicValue = 0;
         for(int i = 0; i < currentBoard.getHeight(); i++){
             for(int j = 0; j < currentBoard.getWidth(); j++){
-                if(currentTiles[i][j] != null) {
+                if(currentTiles[i][j].getValue() != 0) {
                     int currentValue = currentTiles[i][j].getValue();
-                    if (goalTiles[i][j] == null || currentValue != goalTiles[i][j].getValue()) {
+                    if (goalTiles[i][j].getValue() == 0 || currentValue != goalTiles[i][j].getValue()) {
                         int[] tileLocation = goalBoard.findTile(currentValue);
                         //manhattan distance
                         heuristicValue += abs(tileLocation[0] - i) + abs(tileLocation[1] - j);

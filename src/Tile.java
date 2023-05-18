@@ -1,11 +1,7 @@
 public class Tile {
-    private int locationI;
-    private int locationJ;
     private int value;
 
-    public Tile(int value, int locationI, int locationJ){
-        this.locationI = locationI;
-        this.locationJ = locationJ;
+    public Tile(int value){
         this.value = value;
     }
 
@@ -27,11 +23,4 @@ public class Tile {
         return value;
     }
 
-    public int getLocationJ() {
-        return locationJ;
-    }
-
-    public int getLocationI() {
-        return locationI;
-    }
 }

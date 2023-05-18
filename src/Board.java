@@ -6,21 +6,40 @@ public class Board {
     private Tile[][] tiles;
 
     public Board(Tile[][] tiles, int height, int width){
-        this.tiles = tiles;
         this.height = height;
         this.width = width;
+        this.tiles = new Tile[height][width];
+        for(int i = 0; i < height; i++){
+            for(int j = 0; j < width; j++){
+                this.tiles[i][j] = tiles[i][j];
+
+            }
+        }
     }
 
+    public Board(Board board){
+        this.width = board.width;
+        this.height = board.height;
+        this.tiles = new Tile[height][width];
+        for(int i = 0; i < height; i++){
+            for(int j = 0; j < width; j++){
+                    this.tiles[i][j] = board.getTiles()[i][j];
+            }
+        }
+    }
     public Board(String boardStr){
         String[] rows = boardStr.split("\\|");
         this.height = rows.length;
-        this.width = (rows[0].length()+1)/2;
+        this.width = rows[0].split(" ").length;
         this.tiles = new Tile[height][width];
         for(int i = 0; i < height; i++) {
             String[] splitRow = rows[i].split(" ");
-            for (int j = 0; j < rows[i].length(); j++) {
-                if (splitRow[j] != "_") {
-                    this.tiles[i][j] = new Tile(Integer.parseInt(splitRow[j]), i, j);
+            for (int j = 0; j < splitRow.length; j++) {
+                if (!splitRow[j].equals("_")) {
+                    this.tiles[i][j] = new Tile(Integer.parseInt(splitRow[j]));
+                }
+                else{
+                    this.tiles[i][j] = new Tile(0);
                 }
             }
         }
@@ -51,21 +70,13 @@ public class Board {
         return tiles;
     }
 
-    public int[] findEmpty() {
-        int[] location = new int[2];
-        for(int i = 0; i < this.height; i++){
-            for(int j = 0; j < this.width; j++){
-                if(tiles[i][j] == null) {
-                    location[0] = i;
-                    location[1] = j;
-                }
-            }
-        }
-        return location;
-    }
-
     public void setTile(Tile tile, int x, int y){
-        this.tiles[tile.getLocationI()][tile.getLocationJ()] = null;
+        int[] location = new int[2];
+        location = this.findTile(tile.getValue());
+        int i = location[0];
+        int j = location[1];
+        Tile temp = tiles[x][y];
+        this.tiles[i][j] = temp;
         this.tiles[x][y] = tile;
     }
 

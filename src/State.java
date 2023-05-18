@@ -4,7 +4,11 @@ public class State {
     private Board board;
 
     public State(Board board){
-        this.board = board;
+        this.board = new Board(board);
+    }
+
+    public State(State state){
+        this.board = new Board(state.board);
     }
 
     public boolean isGoal(){
@@ -12,6 +16,12 @@ public class State {
         Tile[][] tiles = this.board.getTiles();
         for(int i = 0; i < this.board.getHeight(); i++){
             for(int j = 0; j < this.board.getWidth(); j++){
+                if(tiles[i][j].getValue() == 0) {
+                    if(i == this.board.getHeight()-1 && j == this.board.getWidth()-1)
+                        return true;
+                    else
+                        return false;
+                }
                 if(tiles[i][j].getValue() != count){
                     return false;
                 }
@@ -25,37 +35,41 @@ public class State {
         int[] location = board.findEmpty();
         int i = location[0];
         int j = location[1];
-        int n;
-
-        //corner
-        if((i == board.getHeight()-1 || i == 0) && (j == board.getWidth()-1 || j == 0)){
-            n = 2;
+        int n = 0;
+        if(inBounds(i-1,j)){
+            n++;
         }
-        //side
-        else if(((i == board.getHeight()-1 || i == 0) || (j == board.getWidth()-1 || j == 0))){
-            n = 3;
+        if(inBounds(i+1,j)){
+            n++;
         }
-        else{
-            n = 4;
+        if(inBounds(i,j-1)){
+            n++;
+        }
+        if(inBounds(i,j+1)){
+            n++;
         }
 
         Action[] actions = new Action[n];
-
+        int count = 0;
         //up
-        if(inBounds(i-1, j)){
-            actions[0] = new Action(board.getTiles()[i-1][j], Direction.UP);
+        if (inBounds(i - 1, j)) {
+            actions[count] = new Action(board.getTiles()[i - 1][j], Direction.DOWN);
+            count++;
         }
         //down
-        if(inBounds(i+1, j)){
-            actions[1] = new Action(board.getTiles()[i+1][j], Direction.DOWN);
+        if (inBounds(i + 1, j)) {
+            actions[count] = new Action(board.getTiles()[i + 1][j], Direction.UP);
+            count++;
         }
         //right
-        if(inBounds(i, j+1)) {
-            actions[2] = new Action(board.getTiles()[i][j-1], Direction.RIGHT);
+        if (inBounds(i, j + 1)) {
+            actions[count] = new Action(board.getTiles()[i][j + 1], Direction.LEFT);
+            count++;
         }
         //left
-        if(inBounds(i, j-1)){
-            actions[3] = new Action(board.getTiles()[i][j+1], Direction.LEFT);
+        if (inBounds(i, j - 1)) {
+            actions[count] = new Action(board.getTiles()[i][j - 1], Direction.RIGHT);
+            count++;
         }
 
         return actions;
@@ -81,14 +95,17 @@ public class State {
     }
 
     public State result(Action action){
-        int i = action.getTile().getLocationI();
-        int j = action.getTile().getLocationJ();
-        moveTile(this.board.getTiles()[i][j], action.getDirection(), i, j);
-        return new State(this.board);
+        int[] location = new int[2];
+        location = this.board.findTile(action.getTile().getValue());
+        int i = location[0];
+        int j = location[1];
+        Board newBoard = new Board(this.board);
+        moveTile(newBoard,newBoard.getTiles()[i][j], action.getDirection(), i, j);
+        return new State(newBoard);
     }
 
 
-    public void moveTile(Tile tile, Direction direction, int locationI, int locationJ){
+    public void moveTile(Board board, Tile tile, Direction direction, int locationI, int locationJ){
         int newI = locationI;
         int newJ = locationJ;
         switch (direction){
@@ -105,7 +122,9 @@ public class State {
                 newJ--;
                 break;
         }
-        this.board.setTile(tile, newI, newJ);
+        if(inBounds(newI, newJ)){
+            board.setTile(tile, newI, newJ);
+        }
     }
 
     public Board getBoard(){
