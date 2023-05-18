@@ -32,7 +32,7 @@ public class State {
     }
 
     public Action[] actions(){
-        int[] location = board.findEmpty();
+        int[] location = board.findTile(0);
         int i = location[0];
         int j = location[1];
         int n = 0;

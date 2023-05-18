@@ -1,6 +1,10 @@
 public class Tile {
     private int value;
 
+    /**
+     * constructor
+     * @param value - the value of the tile.
+     */
     public Tile(int value){
         this.value = value;
     }

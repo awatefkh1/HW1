@@ -18,7 +18,8 @@ public class Node {
         int length = possibleActions.length;
         Node[] newNodes = new Node[length];
         for(int i = 0; i < length; i++){
-            newNodes[i] = new Node(this.state.result(possibleActions[i]),this ,possibleActions[i]);
+            State newState = new State(this.state);
+            newNodes[i] = new Node(newState.result(possibleActions[i]),this ,possibleActions[i]);
         }
         return newNodes;
     }

@@ -50,6 +50,12 @@ public class Search {
                 expandedNodes++;
                 Node[] children = node.expand();
 
+//                System.out.println("the prevoius actions ");
+//                for(int i = 0; i < children.length; i++){
+//                    System.out.println(children[i].getAction());
+//                }
+//                System.out.println("\n");
+
                 for (Node child : children) {  // Iterate over all possible child nodes
                     if (!enqueued.contains(child.getState())) {  // Check for duplication
                         enqueued.add(child.getState());  // Mark the child as visited
