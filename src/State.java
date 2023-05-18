@@ -32,7 +32,7 @@ public class State {
     }
 
     public Action[] actions(){
-        int[] location = board.findTile(0);
+        int[] location = this.board.findTile(0);
         int i = location[0];
         int j = location[1];
         int n = 0;
@@ -53,22 +53,22 @@ public class State {
         int count = 0;
         //up
         if (inBounds(i - 1, j)) {
-            actions[count] = new Action(board.getTiles()[i - 1][j], Direction.DOWN);
+            actions[count] = new Action(this.board.getTiles()[i - 1][j], Direction.DOWN);
             count++;
         }
         //down
         if (inBounds(i + 1, j)) {
-            actions[count] = new Action(board.getTiles()[i + 1][j], Direction.UP);
+            actions[count] = new Action(this.board.getTiles()[i + 1][j], Direction.UP);
             count++;
         }
         //right
         if (inBounds(i, j + 1)) {
-            actions[count] = new Action(board.getTiles()[i][j + 1], Direction.LEFT);
+            actions[count] = new Action(this.board.getTiles()[i][j + 1], Direction.LEFT);
             count++;
         }
         //left
         if (inBounds(i, j - 1)) {
-            actions[count] = new Action(board.getTiles()[i][j - 1], Direction.RIGHT);
+            actions[count] = new Action(this.board.getTiles()[i][j - 1], Direction.RIGHT);
             count++;
         }
 
@@ -77,7 +77,7 @@ public class State {
     }
 
     public boolean inBounds(int i, int j){
-        return (i >= 0 && j >= 0 && i < board.getHeight() && j < board.getWidth());
+        return (i >= 0 && j >= 0 && i < this.board.getHeight() && j < this.board.getWidth());
     }
 
     @Override

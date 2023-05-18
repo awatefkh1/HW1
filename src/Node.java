@@ -77,7 +77,7 @@ public class Node {
     }
 
 
-    private int abs(int value){
+    private static int abs(int value){
         if(value < 0){
             return value*(-1);
         }

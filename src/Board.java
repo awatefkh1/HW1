@@ -75,7 +75,7 @@ public class Board {
         location = this.findTile(tile.getValue());
         int i = location[0];
         int j = location[1];
-        Tile temp = tiles[x][y];
+        Tile temp = this.tiles[x][y];
         this.tiles[i][j] = temp;
         this.tiles[x][y] = tile;
     }
@@ -84,7 +84,7 @@ public class Board {
         int[] location = new int[2];
         for(int i = 0; i < this.height; i++){
             for(int j = 0; j < this.width; j++){
-                if(tiles[i][j].getValue() == value) {
+                if(this.tiles[i][j].getValue() == value) {
                     location[0] = i;
                     location[1] = j;
                 }
