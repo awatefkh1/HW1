@@ -3,6 +3,10 @@ import java.util.concurrent.LinkedBlockingDeque;
 public class State {
     private Board board;
 
+    public State(Board board){
+        this.board = board;
+    }
+
     public boolean isGoal(){
         int count = 1;
         Tile[][] tiles = this.board.getTiles();

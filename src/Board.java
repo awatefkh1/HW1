@@ -5,8 +5,14 @@ public class Board {
     private int height;//m
     private Tile[][] tiles;
 
+    public Board(Tile[][] tiles, int height, int width){
+        this.tiles = tiles;
+        this.height = height;
+        this.width = width;
+    }
+
     public Board(String boardStr){
-        String[] rows = boardStr.split("|");
+        String[] rows = boardStr.split("\\|");
         this.height = rows.length;
         this.width = (rows[0].length()+1)/2;
         this.tiles = new Tile[height][width];
@@ -58,4 +64,21 @@ public class Board {
         return location;
     }
 
+    public void setTile(Tile tile, int x, int y){
+        this.tiles[tile.getLocationI()][tile.getLocationJ()] = null;
+        this.tiles[x][y] = tile;
+    }
+
+    public int[] findTile(int value) {
+        int[] location = new int[2];
+        for(int i = 0; i < this.height; i++){
+            for(int j = 0; j < this.width; j++){
+                if(tiles[i][j].getValue() == value) {
+                    location[0] = i;
+                    location[1] = j;
+                }
+            }
+        }
+        return location;
+    }
 }

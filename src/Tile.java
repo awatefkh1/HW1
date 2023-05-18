@@ -1,5 +1,6 @@
 public class Tile {
-
+    private int locationI;
+    private int locationJ;
     private int value;
 
     public Tile(int value, int locationI, int locationJ){

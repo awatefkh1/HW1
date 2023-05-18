@@ -1,8 +1,8 @@
 public class Action {
     private Tile tile;
-    private String direction;
+    private Direction direction;
 
-    public Action(Tile tile, String direction){
+    public Action(Tile tile, Direction direction){
         this.tile = tile;
         this.direction = direction;
     }
