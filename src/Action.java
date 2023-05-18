@@ -9,14 +9,14 @@ public class Action {
 
     @Override
     public String toString() {
-        return "Move " + this.tile.getValue() + " " + this.direction;
+        return "Move " + this.tile.getValue() + " " + this.direction.toString().toLowerCase();
     }
 
     public Tile getTile(){
         return this.tile;
     }
 
-    public String getDirection(){
+    public Direction getDirection(){
         return this.direction;
     }
 }

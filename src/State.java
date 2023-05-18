@@ -39,19 +39,19 @@ public class State {
 
         //up
         if(inBounds(i-1, j)){
-            actions[0] = new Action(board.getTiles()[i-1][j], "up");
+            actions[0] = new Action(board.getTiles()[i-1][j], Direction.UP);
         }
         //down
         if(inBounds(i+1, j)){
-            actions[1] = new Action(board.getTiles()[i+1][j], "down");
+            actions[1] = new Action(board.getTiles()[i+1][j], Direction.DOWN);
         }
         //right
         if(inBounds(i, j+1)) {
-            actions[2] = new Action(board.getTiles()[i][j-1], "right");
+            actions[2] = new Action(board.getTiles()[i][j-1], Direction.RIGHT);
         }
         //left
         if(inBounds(i, j-1)){
-            actions[3] = new Action(board.getTiles()[i][j+1], "left");
+            actions[3] = new Action(board.getTiles()[i][j+1], Direction.LEFT);
         }
 
         return actions;
@@ -84,23 +84,27 @@ public class State {
     }
 
 
-    public void moveTile(Tile tile, String direction, int locationI, int locationJ){
+    public void moveTile(Tile tile, Direction direction, int locationI, int locationJ){
         int newI = locationI;
         int newJ = locationJ;
         switch (direction){
-            case "up":
+            case UP:
                 newI--;
                 break;
-            case "down":
+            case DOWN:
                 newI++;
                 break;
-            case "right":
+            case RIGHT:
                 newJ++;
                 break;
-            case "left":
+            case LEFT:
                 newJ--;
                 break;
         }
         this.board.setTile(tile, newI, newJ);
+    }
+
+    public Board getBoard(){
+        return this.board;
     }
 }
