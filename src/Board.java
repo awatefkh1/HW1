@@ -12,7 +12,6 @@ public class Board {
         for(int i = 0; i < height; i++){
             for(int j = 0; j < width; j++){
                 this.tiles[i][j] = tiles[i][j];
-
             }
         }
     }
