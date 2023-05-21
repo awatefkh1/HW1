@@ -1,5 +1,5 @@
 public class Tile {
-    private int value;
+    private final int value;//the value of the tile
 
     /**
      * constructor
@@ -9,6 +9,11 @@ public class Tile {
         this.value = value;
     }
 
+    /**
+     * checks if two tiles are equal.
+     * @param other second tile
+     * @return true if tiles equal, false otherwise.
+     */
     @Override
     public boolean equals(Object other) {
         if (!(other instanceof Tile)) {
@@ -23,6 +28,10 @@ public class Tile {
         return Integer.hashCode(value);
     }
 
+    /**
+     * returns value of tile.
+     * @return value of tile.
+     */
     public int getValue() {
         return value;
     }

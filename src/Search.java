@@ -21,8 +21,7 @@ public class Search {
     private Node getRoot(String boardString) {
         Board rootBoard = new Board(boardString);
         State rootState = new State(rootBoard);
-        Node rootNode = new Node(rootState);
-        return rootNode;
+        return new Node(rootState);
     }
 
     /**
@@ -50,11 +49,6 @@ public class Search {
                 expandedNodes++;
                 Node[] children = node.expand();
 
-//                System.out.println("the prevoius actions ");
-//                for(int i = 0; i < children.length; i++){
-//                    System.out.println(children[i].getAction());
-//                }
-//                System.out.println("\n");
 
                 for (Node child : children) {  // Iterate over all possible child nodes
                     if (!enqueued.contains(child.getState())) {  // Check for duplication

@@ -1,21 +1,32 @@
 public class Node {
-    private State state;
-    private Node parent;
-    private Action action;
-    private int heuristicValue;
+    private final State state;//the state of the board
+    private Node parent;//the parent node of the current node
+    private Action action;//the previous action
 
-    //constructor to the first node
+    /**
+     * constructor to the first node
+     * @param currentState the first state.
+     */
     public Node(State currentState){
         this.state = currentState;
-        this.heuristicValue = heuristicValue();
     }
+
+    /**
+     * constructor.
+     * @param currentState the new state.
+     * @param parent the parent node of the new node.
+     * @param lastAction the last action preformed that resulted in the new state.
+     */
     public Node(State currentState, Node parent, Action lastAction){
         this.state = currentState;
         this.parent = parent;
         this.action = lastAction;
-        this.heuristicValue = heuristicValue();
     }
 
+    /**
+     * expands the current node to different nodes.
+     * @return array of new possible nodes.
+     */
     public Node[] expand(){
         Action[] possibleActions = this.state.actions();
         int length = possibleActions.length;
@@ -28,20 +39,36 @@ public class Node {
     }
 
 
+    /**
+     * returns the action of the node.
+     * @return the action.
+     */
     public Action getAction(){
         return this.action;
     }
 
+    /**
+     * returns the parent node.
+     * @return the parent node.
+     */
     public Node getParent(){
         return this.parent;
     }
 
+    /**
+     * returns the current state
+     * @return the state.
+     */
     public State getState(){
         return this.state;
     }
 
-    public int getHeuristicValue() { return  this.heuristicValue;}
 
+    /**
+     * creates the goal board from the current board.
+     * @param board the current board
+     * @return the goal board.
+     */
     private Board goalBoard(Board board){
         int height = board.getHeight();
         int width = board.getWidth();
@@ -54,84 +81,77 @@ public class Node {
             }
         }
         tiles[height-1][width-1] = new Tile(0);
-
-        Board goalBoard = new Board(tiles, height, width);
-        return goalBoard;
+        return new Board(tiles, height, width);
     }
 
+    /**
+     * this method checks for linear conflicts in the current node and calculates the number of additional steps
+     * @return number of steps added to the heuristic value
+     */
     public int linear_conflicts(){
-        int inversions = 0;
-        int counter = 0;
         int height = this.state.getBoard().getHeight();
         int width = this.state.getBoard().getWidth();
-        int[] to_1d = new int[width * height];
-        //from 2d to 1d
-        for(int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                to_1d[counter] = this.state.getBoard().getTiles()[i][j].getValue();
-                counter++;
-            }
-        }
-        //rows
-        for(int i = 0; i < height; i++){
-            for(int j = i*width; j <(i+1)*width ; j++){
-                for(int k = j+1; k < (i+1)*width; k++) {
-                    if (to_1d[j] > to_1d[k]) {
-                        inversions++;
-                    }
+        int counter = 0;
+        Tile[][] tiles = this.state.getBoard().getTiles();
+        for(int i = 0; i < height; i ++){
+            int max = 0;
+            for(int j = 0; j < width; j++){
+                if(tiles[i][j].getValue() < max && tiles[i][j].getValue() > i*width &&
+                        tiles[i][j].getValue() <= ((i+1)*width)){
+                    counter+=2;
+                    break;
                 }
+                if(tiles[i][j].getValue() > i*width && tiles[i][j].getValue() <= ((i+1)*width))
+                    max = tiles[i][j].getValue();
             }
         }
-        //columns
-        for(int i = 0 ; i < width; i++){
-            for(int j = i; j < to_1d.length; j+=width){
-                for(int k = j+1; k < to_1d.length; k+= width) {
-                    if (to_1d[j] > to_1d[k]) {
-                        inversions++;
-                    }
+        for(int i = 0; i < width; i ++){
+            int max = 0;
+            for(int j = 0; j < height; j++){
+                if(tiles[j][i].getValue() < max && tiles[j][i].getValue()%width == i){
+                    counter+=2;
+                    break;
                 }
+                if(tiles[j][i].getValue()%width == i)
+                    max = tiles[j][i].getValue();
             }
         }
-        return inversions*2;
+        return counter;
     }
 
+    /**
+     * calculates the heuristic value of the current node.
+     * @return the heuristic value of the node.
+     */
     public int heuristicValue(){
         Board currentBoard = this.state.getBoard();
         Board goalBoard = goalBoard(currentBoard);
         int heuristic = 0;
-//        if(this.action != null){
-//            int currentValue = this.action.getTile().getValue();
-//            int previousHueristic = this.parent.getHeuristicValue();
-//            int[] tileLocationGoal = goalBoard.findTile(currentValue);
-//            int[] tileLocationCurrent = currentBoard.findTile(currentValue);
-//            int[] tileLocationPrevious = currentBoard.findTile(currentValue);
-//            //manhattan distance
-//            previousHueristic -= abs(tileLocationGoal[0] - tileLocationPrevious[0]) + abs(tileLocationGoal[1] - tileLocationPrevious[1]);
-//            heuristic += previousHueristic + abs(tileLocationGoal[0] - tileLocationCurrent[0]) + abs(tileLocationGoal[1] - tileLocationCurrent[1]);
-//        }
-//        else {
-            Tile[][] currentTiles = currentBoard.getTiles();
-            Tile[][] goalTiles = goalBoard.getTiles();
+        Tile[][] currentTiles = currentBoard.getTiles();
+        Tile[][] goalTiles = goalBoard.getTiles();
 
-            for (int i = 0; i < currentBoard.getHeight(); i++) {
-                for (int j = 0; j < currentBoard.getWidth(); j++) {
-                    if (currentTiles[i][j].getValue() != 0) {
-                        int currentValue = currentTiles[i][j].getValue();
-                        if (goalTiles[i][j].getValue() == 0 || currentValue != goalTiles[i][j].getValue()) {
-                            int[] tileLocation = goalBoard.findTile(currentValue);
-                            //manhattan distance
-                            heuristic += abs(tileLocation[0] - i) + abs(tileLocation[1] - j);
+        for (int i = 0; i < currentBoard.getHeight(); i++) {
+            for (int j = 0; j < currentBoard.getWidth(); j++) {
+                if (currentTiles[i][j].getValue() != 0) {
+                    int currentValue = currentTiles[i][j].getValue();
+                    if (goalTiles[i][j].getValue() == 0 || currentValue != goalTiles[i][j].getValue()) {
+                        int[] tileLocation = goalBoard.findTile(currentValue);
+                        //manhattan distance
+                        heuristic += abs(tileLocation[0] - i) + abs(tileLocation[1] - j);
 
-                        }
                     }
                 }
             }
-        //}
-        //heuristicValue += linear_conflicts();
+        }
+        heuristic += linear_conflicts();
         return heuristic;
     }
 
-
+    /**
+     * calculates the absolut value.
+     * @param value the value
+     * @return absolut value of the value.
+     */
     private static int abs(int value){
         if(value < 0){
             return value*(-1);
